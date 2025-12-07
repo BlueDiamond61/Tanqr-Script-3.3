@@ -1,4 +1,10 @@
 Latest update:
+-Tweaked some settings
+-Added day/night button inside of settings.
+Previous updates:
+
+12/6/25
+
 -Fixed anti lag
 -Fixed bugs
 -Added esp
@@ -6,9 +12,6 @@ Latest update:
 -Deleted 2x button click logic
 -Aim System settings change like
 p=1
-
-Previous updates:
-
 -Added TanqR Gui 2.4 Made inprovements on TanqR gui 2.4 11/30/25(Minor Improvements) -Fixed more bugs -Fixed issues with shaders -Minor bugs have been fixed -Added Anti lag You can find shaders in settings tab! Please do not use anti lag it is currently broken and will not work. unless you want your screen to be white...
 
 11/29/25

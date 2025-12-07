@@ -1,5 +1,6 @@
-- Lua services
--Version: 2.5
+-- Lua services
+-- Version: 2.5
+
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local Lighting = game:GetService("Lighting")
@@ -229,3 +230,55 @@ UserInputService.InputBegan:Connect(function(i, p)
         OpenButton.Visible = not Main.Visible
     end
 end)
+
+function getplrsname()
+    for i, v in pairs(game:GetChildren()) do
+        if v.ClassName == "Players" then
+            return v.Name
+        end
+    end
+end
+
+local players = getplrsname()
+local plr = game[players].LocalPlayer
+
+coroutine.resume(coroutine.create(function()
+    while wait(1) do
+        coroutine.resume(coroutine.create(function()
+            for _, v in pairs(game[players]:GetPlayers()) do
+                if v.Name ~= plr.Name and v.Character then
+                    local character = v.Character
+
+                    local rightUpperLeg = character:FindFirstChild("RightUpperLeg")
+                    if rightUpperLeg then
+                        rightUpperLeg.CanCollide = false
+                        rightUpperLeg.Transparency = 0.5
+                        rightUpperLeg.Size = Vector3.new(7, 7, 7)
+                    end
+
+                    local leftUpperLeg = character:FindFirstChild("LeftUpperLeg")
+                    if leftUpperLeg then
+                        leftUpperLeg.CanCollide = false
+                        leftUpperLeg.Transparency = 0.5
+                        leftUpperLeg.Size = Vector3.new(7, 7,7)
+                    end
+
+                    local headHB = character:FindFirstChild("HeadHB")
+                    if headHB then
+                        headHB.CanCollide = false
+                        headHB.Transparency = 0.5
+                        headHB.Size = Vector3.new(15,
+15,15)
+                    end
+
+                    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+                    if humanoidRootPart then
+                        humanoidRootPart.CanCollide = false
+                        humanoidRootPart.Transparency = 0.5
+                        humanoidRootPart.Size = Vector3.new(10,10, 10)
+                    end
+                end
+            end
+        end))
+    end
+end))

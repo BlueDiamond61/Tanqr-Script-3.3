@@ -1,9 +1,17 @@
 Latest update: - Fixed Player Duplicate fetching
-- Fixes bugs
-
+-Major bug fixed: the bottom coroutine was always resizing hitboxes, even when Aim was OFF
+✅ Aim toggle now actually enables/disables now
+✅ ESP now removes name tags when turned OFF
+✅ Prevents duplicated BillboardGui ESP instances
+✅ Prevents Lighting shader stacking
+✅ Safer handling if parts don’t exist (HeadHB etc.)
+✅ Reduced unnecessary looping work
 
 
 Previous updates:
+-Fixed Bugs
+
+
 -Tweaked some settings
 -Added day/night button inside of settings.
 

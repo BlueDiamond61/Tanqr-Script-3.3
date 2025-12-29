@@ -1,38 +1,74 @@
-Latest update: - Fixed Player Duplicate fetching
--Major bug fixed: the bottom coroutine was always resizing hitboxes, even when Aim was OFF
-✅ Aim toggle now actually enables/disables now
-✅ ESP now removes name tags when turned OFF
-✅ Prevents duplicated BillboardGui ESP instances
-✅ Prevents Lighting shader stacking
-✅ Safer handling if parts don’t exist (HeadHB etc.)
-✅ Reduced unnecessary looping work
+**Latest Update – 12/29/25**
 
+🔧 **Fixes**
 
-Previous updates:
--Fixed Bugs
+* Aim reset bug
+* Transparency is now restored correctly (was forcing `0` even if original wasn’t)
+* ESP toggle bug
 
+  * ESP now applies immediately to already-spawned characters when turned **ON**
+* ESP duplication protection
 
--Tweaked some settings
--Added day/night button inside of settings.
+  * Prevents multiple `BillboardGui` instances stacking
+* Anti-Lag restore bug
 
-12/6/25
+  * Materials are now restored instead of being permanently overwritten
+* Night/Day button text logic
 
+  * Button text now correctly reflects the *next* mode
+* UI toggle edge cases
 
+  * `RightControl` now properly handles Main / Settings visibility
+* Memory safety
 
--Fixed anti lag
--Fixed bugs
--Added esp
--Fixed some code issues
--Deleted 2x button click logic
--Aim System settings change like
-p=1
--Added TanqR Gui 2.4 Made inprovements on TanqR gui 2.4 11/30/25(Minor Improvements) -Fixed more bugs -Fixed issues with shaders -Minor bugs have been fixed -Added Anti lag You can find shaders in settings tab! Please do not use anti lag it is currently broken and will not work. unless you want your screen to be white...
+  * Prevents runaway connections and stale references
 
-11/29/25
+⚡ **Improvements**
 
-Bug Fixes
-Shaders Inside Settings Tab
-Improved Aim system
-And other stuff
-I Might make some changes on this soon
-So yeah
+* Cached original **Size**, **Transparency**, and **Material**
+* Reduced unnecessary looping
+* Safer `CharacterAdded` handling
+* Cleaner state management
+
+---
+
+**Previous Updates**
+
+**(:**
+
+* Fixed player duplicate fetching
+* Major bug fixed where hitboxes resized even when Aim was OFF
+* Aim toggle now properly enables/disables
+* ESP removes name tags when turned OFF
+* Prevented duplicated BillboardGui ESP instances
+* Prevented Lighting shader stacking
+* Safer handling for missing parts (HeadHB, etc.)
+* Reduced unnecessary looping work
+
+**12/6/25**
+
+* Fixed anti-lag
+* Fixed bugs
+* Added ESP
+* Fixed code issues
+* Removed duplicate button click logic
+* Aim system setting change (`p = 1`)
+* Added Day/Night button inside Settings
+
+**11/30/25 – TanqR GUI 2.4**
+
+* GUI improvements
+* Fixed more bugs
+* Fixed shader issues
+* Minor bug fixes
+* Added Anti-Lag
+* Shaders moved to Settings tab
+* Anti-Lag unstable at the time (could cause white screen)
+
+**11/29/25**
+
+* Bug fixes
+* Shaders inside Settings tab
+* Improved Aim system
+* Minor improvements
+

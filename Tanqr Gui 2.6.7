@@ -1,0 +1,172 @@
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
+local Workspace = game:GetService("Workspace")
+local LocalPlayer = Players.LocalPlayer
+
+local Window = Rayfield:CreateWindow({
+    Name = "TanqR 2.66 GUI",
+    Icon = "rewind",
+    LoadingTitle = "TanqR 2.66",
+    LoadingSubtitle = "by vxbby",
+    Theme = "Default",
+    ToggleUIKeybind = "T",
+    ConfigurationSaving = {Enabled = true, FolderName = nil, FileName = "TanqR_2_66"},
+    KeySystem = true,
+    KeySettings = {Title = "TanqR 2.66", Subtitle = "Key System", Note = "Enter key to continue", FileName = "TanqRKey", SaveKey = true, GrabKeyFromSite = false, Key = {"bullet"}}
+})
+
+Rayfield:Notify({Title = "Loaded", Content = "TanqR 2.66 GUI Ready", Duration = 6.5, Image = 4483362458})
+
+local AimEnabled = false
+local ESPEnabled = false
+local NightMode = false
+local AntiLagEnabled = false
+
+local AimParts = {
+    HeadHB = Vector3.new(20, 20, 20),
+    HumanoidRootPart = Vector3.new(16, 16, 16),
+    RightUpperLeg = Vector3.new(14, 14, 14),
+    LeftUpperLeg = Vector3.new(14, 14, 14)
+}
+
+local OriginalParts = {}
+
+local function restoreParts()
+    for part, data in pairs(OriginalParts) do
+        if part and part.Parent then
+            part.Size = data.Size
+            part.Transparency = data.Transparency
+            part.CanCollide = data.CanCollide
+            part.LocalTransparencyModifier = data.LTM or 0
+            part.CastShadow = data.CastShadow
+        end
+    end
+    table.clear(OriginalParts)
+end
+
+local function applyAim()
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 then
+            for n, s in pairs(AimParts) do
+                local part = plr.Character:FindFirstChild(n)
+                if part then
+                    if not OriginalParts[part] then
+                        OriginalParts[part] = {
+                            Size = part.Size,
+                            Transparency = part.Transparency,
+                            CanCollide = part.CanCollide,
+                            LTM = part.LocalTransparencyModifier,
+                            CastShadow = part.CastShadow
+                        }
+                    end
+                    part.Size = s
+                    part.Transparency = 0
+                    part.LocalTransparencyModifier = 1
+                    part.CanCollide = false
+                    part.CastShadow = false
+                    part.Material = Enum.Material.SmoothPlastic
+                end
+            end
+        end
+    end
+end
+
+task.spawn(function()
+    while task.wait(0.25) do
+        if AimEnabled then
+            applyAim()
+        else
+            restoreParts()
+        end
+    end
+end)
+
+local function addESP(char)
+    if char:FindFirstChild("TanqrESP") then return end
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "TanqrESP"
+    highlight.Adornee = char
+    highlight.FillColor = Color3.fromRGB(255, 50, 50)
+    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+    highlight.Parent = Workspace
+end
+
+local function removeESP(char)
+    for _, v in pairs(Workspace:GetChildren()) do
+        if v:IsA("Highlight") and v.Adornee == char then
+            v:Destroy()
+        end
+    end
+end
+
+local function applyESPToPlayer(plr)
+    if plr == LocalPlayer then return end
+    if plr.Character and ESPEnabled then addESP(plr.Character) end
+    plr.CharacterAdded:Connect(function(c)
+        task.wait(0.5)
+        if ESPEnabled then addESP(c) end
+    end)
+end
+
+for _, p in ipairs(Players:GetPlayers()) do applyESPToPlayer(p) end
+Players.PlayerAdded:Connect(applyESPToPlayer)
+
+local MainTab = Window:CreateTab("Main", 4483362458)
+local OtherTab = Window:CreateTab("Other Features", "rewind")
+local ExtraTab = Window:CreateTab("Extra", "rewind")
+local ScriptBloxTab = Window:CreateTab("ScriptBlox Search", "rewind")
+
+MainTab:CreateSection("TanqR Features")
+MainTab:CreateButton({Name="Tanqr Aim",Callback=function() AimEnabled = not AimEnabled end})
+MainTab:CreateToggle({Name="Anti-Lag",CurrentValue=false,Flag="AntiLag",Callback=function(val) AntiLagEnabled = val end})
+MainTab:CreateButton({Name="Purple Team",Callback=function()
+    local t = Workspace:FindFirstChild("Purple")
+    if t and LocalPlayer.Team ~= t then LocalPlayer.Team = t end
+end})
+
+OtherTab:CreateSection("ESP & Visuals")
+OtherTab:CreateToggle({Name="ESP Highlight",CurrentValue=false,Flag="ESP",Callback=function(val)
+    ESPEnabled = val
+    if not ESPEnabled then
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p.Character then removeESP(p.Character) end
+        end
+    else
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p.Character then addESP(p.Character) end
+        end
+    end
+end})
+OtherTab:CreateButton({Name="Night Mode",Callback=function()
+    NightMode = not NightMode
+    Lighting.TimeOfDay = NightMode and "00:00:00" or "14:00:00"
+end})
+
+ExtraTab:CreateSection("Notifications")
+ExtraTab:CreateButton({Name="Test Notification",Callback=function()
+    Rayfield:Notify({Title="Notification",Content="This is a test",Duration=6.5,Image=4483362458})
+end})
+
+ScriptBloxTab:CreateSection("ScriptBlox Script Search")
+ScriptBloxTab:CreateButton({
+    Name = "Load Script Search",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/chillz-workshop/main/ScriptSearcher"))()
+    end
+})
+
+UserInputService.InputBegan:Connect(function(input,processed)
+    if processed then return end
+    if input.KeyCode == Enum.KeyCode.RightControl then
+        local visible = Window.Main.Visible
+        Window.Main.Visible = not visible
+    end
+end)
+
+LocalPlayer.CharacterAdded:Connect(function(char)
+    task.wait(0.5)
+    restoreParts()
+end)

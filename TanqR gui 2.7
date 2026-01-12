@@ -1,0 +1,188 @@
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
+local Workspace = game:GetService("Workspace")
+local LocalPlayer = Players.LocalPlayer
+
+local Window = Rayfield:CreateWindow({
+    Name = "TanqR 2.7 GUI",
+    Icon = "rewind",
+    LoadingTitle = "TanqR 2.7",
+    LoadingSubtitle = "by vxbby",
+    Theme = "Default",
+    ToggleUIKeybind = "T",
+    ConfigurationSaving = {Enabled = true, FolderName = nil, FileName = "TanqR_2_7"},
+    KeySystem = true,
+    KeySettings = {Title = "TanqR 2.7", Subtitle = "Key System", Note = "Enter key to continue", FileName = "TanqRKey", SaveKey = true, GrabKeyFromSite = false, Key = {"bullet"}}
+})
+
+Rayfield:Notify({Title = "Loaded", Content = "TanqR 2.7 GUI Ready", Duration = 6.5, Image = 4483362458})
+
+local AimEnabled = false
+local ESPEnabled = false
+local NightMode = false
+local AntiLagEnabled = false
+
+local AimParts = {
+    HeadHB = Vector3.new(20, 20, 20),
+    HumanoidRootPart = Vector3.new(16, 16, 16),
+    RightUpperLeg = Vector3.new(14, 14, 14),
+    LeftUpperLeg = Vector3.new(14, 14, 14),
+    RightLowerLeg = Vector3.new(12, 12, 12),
+}
+
+local OriginalParts = {}
+local ESPHighlights = {}
+local OriginalLighting = {Brightness = Lighting.Brightness, Ambient = Lighting.Ambient, FogEnd = Lighting.FogEnd}
+
+local function restoreParts()
+    for part, data in pairs(OriginalParts) do
+        if part and part.Parent then
+            part.Size = data.Size
+            part.Transparency = data.Transparency
+            part.CanCollide = data.CanCollide
+            part.LocalTransparencyModifier = data.LTM or 0
+            part.CastShadow = data.CastShadow
+            part.Material = data.Material
+        end
+    end
+    table.clear(OriginalParts)
+end
+
+local function applyAim()
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 then
+            for n, s in pairs(AimParts) do
+                local part = plr.Character:FindFirstChild(n)
+                if part then
+                    if not OriginalParts[part] then
+                        OriginalParts[part] = {Size = part.Size, Transparency = part.Transparency, CanCollide = part.CanCollide, LTM = part.LocalTransparencyModifier, CastShadow = part.CastShadow, Material = part.Material}
+                    end
+                    part.Size = s
+                    part.Transparency = 0
+                    part.LocalTransparencyModifier = 1
+                    part.CanCollide = false
+                    part.CastShadow = false
+                    part.Material = Enum.Material.SmoothPlastic
+                end
+            end
+        end
+    end
+end
+
+task.spawn(function()
+    while task.wait(0.25) do
+        if AimEnabled then
+            applyAim()
+        else
+            restoreParts()
+        end
+    end
+end)
+
+local function addESP(char)
+    if ESPHighlights[char] then return end
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "TanqrESP"
+    highlight.Adornee = char
+    highlight.FillColor = Color3.fromRGB(255, 50, 50)
+    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    highlight.Parent = Workspace
+    ESPHighlights[char] = highlight
+end
+
+local function removeESP(char)
+    if ESPHighlights[char] then
+        ESPHighlights[char]:Destroy()
+        ESPHighlights[char] = nil
+    end
+end
+
+local function toggleESP(state)
+    ESPEnabled = state
+    if not state then
+        for char, _ in pairs(ESPHighlights) do removeESP(char) end
+    else
+        for _, plr in ipairs(Players:GetPlayers()) do
+            if plr.Character then addESP(plr.Character) end
+        end
+    end
+end
+
+local function toggleNightMode(state)
+    NightMode = state
+    if state then
+        Lighting.TimeOfDay = "00:00:00"
+        Lighting.Brightness = 0.2
+        Lighting.Ambient = Color3.fromRGB(50, 50, 50)
+        Lighting.FogEnd = 1000
+    else
+        Lighting.TimeOfDay = "14:00:00"
+        Lighting.Brightness = OriginalLighting.Brightness
+        Lighting.Ambient = OriginalLighting.Ambient
+        Lighting.FogEnd = OriginalLighting.FogEnd
+    end
+end
+
+local function toggleAntiLag(state)
+    AntiLagEnabled = state
+    for _, obj in pairs(Workspace:GetDescendants()) do
+        if obj:IsA("ParticleEmitter") or obj:IsA("Trail") then
+            obj.Enabled = not state
+        elseif obj:IsA("Decal") or obj:IsA("Texture") then
+            obj.Transparency = state and 1 or 0
+        elseif obj:IsA("BasePart") then
+            obj.CastShadow = not state
+            obj.Material = state and Enum.Material.SmoothPlastic or obj.Material
+        end
+    end
+end
+
+local function applyESPToPlayer(plr)
+    if plr == LocalPlayer then return end
+    if plr.Character and ESPEnabled then addESP(plr.Character) end
+    plr.CharacterAdded:Connect(function(c)
+        task.wait(0.5)
+        if ESPEnabled then addESP(c) end
+    end)
+end
+
+for _, p in ipairs(Players:GetPlayers()) do applyESPToPlayer(p) end
+Players.PlayerAdded:Connect(applyESPToPlayer)
+Players.PlayerRemoving:Connect(function(plr) if plr.Character then removeESP(plr.Character) end end)
+
+local MainTab = Window:CreateTab("Main", 4483362458)
+local OtherTab = Window:CreateTab("Other Features", "rewind")
+local ExtraTab = Window:CreateTab("Extra", "rewind")
+local ScriptBloxTab = Window:CreateTab("ScriptBlox Search", "rewind")
+
+MainTab:CreateSection("TanqR Features")
+MainTab:CreateButton({Name="Tanqr Aim", Callback=function() AimEnabled = not AimEnabled end})
+MainTab:CreateToggle({Name="Anti-Lag", CurrentValue=false, Flag="AntiLag", Callback=toggleAntiLag})
+MainTab:CreateButton({Name="Purple Team", Callback=function() local t = Workspace:FindFirstChild("Purple") if t and LocalPlayer.Team ~= t then LocalPlayer.Team = t end end})
+
+OtherTab:CreateSection("ESP & Visuals")
+OtherTab:CreateToggle({Name="ESP Highlight", CurrentValue=false, Flag="ESP", Callback=toggleESP})
+OtherTab:CreateButton({Name="Night Mode", Callback=function() toggleNightMode(not NightMode) end})
+
+ExtraTab:CreateSection("Notifications")
+ExtraTab:CreateButton({Name="Test Notification", Callback=function() Rayfield:Notify({Title="Notification", Content="This is a test", Duration=6.5, Image=4483362458}) end})
+
+ScriptBloxTab:CreateSection("ScriptBlox Script Search")
+ScriptBloxTab:CreateButton({Name="Load Script Search", Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/chillz-workshop/main/ScriptSearcher"))() end})
+
+UserInputService.InputBegan:Connect(function(input, processed)
+    if processed then return end
+    if input.KeyCode == Enum.KeyCode.RightControl then
+        local visible = Window.Main.Visible
+        Window.Main.Visible = not visible
+    end
+end)
+
+LocalPlayer.CharacterAdded:Connect(function(char)
+    task.wait(0.5)
+    restoreParts()
+end)

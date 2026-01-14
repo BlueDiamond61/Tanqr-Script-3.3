@@ -1,83 +1,58 @@
-**Latest Update – 1/10/26**
-* Removed unesscary code
-* Fixed some buttons that casued lags
-* Improved performance
-* Add uistroke to gui
-* Improved gui slighty
-* Modified aimparts settings
-* Added Ui Libiary
-* Scriptblox search( Loads another loadstring)
-you can change it to whatever you want dont change to 27+ Or higher it can cause lags and shoot resgister issues
-
-🔧 **Fixes**
-
-* Aim reset bug
-* Transparency is now restored correctly (was forcing `0` even if original wasn’t)
-* ESP toggle bug
-
-  * ESP now applies immediately to already-spawned characters when turned **ON**
-* ESP duplication protection
-
-  * Prevents multiple `BillboardGui` instances stacking
-* Anti-Lag restore bug
-
-  * Materials are now restored instead of being permanently overwritten
-* Night/Day button text logic
-
-  * Button text now correctly reflects the *next* mode
-* UI toggle edge cases
-
-  * `RightControl` now properly handles Main / Settings visibility
-* Memory safety
-
-  * Prevents runaway connections and stale references
-
-⚡ **Improvements**
-
-* Cached original **Size**, **Transparency**, and **Material**
-* Reduced unnecessary looping
-* Safer `CharacterAdded` handling
-* Cleaner state management
-
----
-
-**Previous Updates**
-
-**(:**
-
-* Fixed player duplicate fetching
-* Major bug fixed where hitboxes resized even when Aim was OFF
-* Aim toggle now properly enables/disables
-* ESP removes name tags when turned OFF
-* Prevented duplicated BillboardGui ESP instances
-* Prevented Lighting shader stacking
-* Safer handling for missing parts (HeadHB, etc.)
-* Reduced unnecessary looping work
-
-**12/6/25**
-
-* Fixed anti-lag
-* Fixed bugs
-* Added ESP
-* Fixed code issues
-* Removed duplicate button click logic
-* Aim system setting change (`p = 1`)
-* Added Day/Night button inside Settings
-
-**11/30/25 – TanqR GUI 2.4**
-
-* GUI improvements
-* Fixed more bugs
-* Fixed shader issues
-* Minor bug fixes
-* Added Anti-Lag
-* Shaders moved to Settings tab
-* Anti-Lag unstable at the time (could cause white screen)
-
-**11/29/25**
-
-* Bug fixes
-* Shaders inside Settings tab
-* Improved Aim system
-* Minor improvements
-
+📌 Changelog
+Latest Update – 1/13/26
+🔑 Key Change
+ - Changed key from Bullet to Sakura
+Update – 1/10/26
+🧹 Cleanup & Optimization
+- Removed unnecessary code
+- Fixed buttons causing lag
+- Improved overall performance
+- Reduced unnecessary looping
+- Improved memory safety (prevents runaway connections & stale references)
+🎨 UI Improvements
+- Added UIStroke to GUI
+- Slight GUI visual improvements
+- Added UI Library
+- ScriptBlox search added (loads another loadstring — do not change to 27+ or higher, may cause lag & hit registration issues)
+- Improved UI toggle edge cases
+- RightControl properly handles Main / Settings visibility
+🎯 Aim System
+- Modified AimParts settings
+- Fixed aim reset bug
+- Aim toggle now properly enables/disables
+- Fixed hitboxes resizing when Aim is OFF
+👁️ ESP
+- Fixed ESP toggle bug
+- ESP applies immediately to already-spawned characters
+- ESP duplication protection
+- Prevents multiple BillboardGui stacking
+- ESP now removes name tags when turned OFF
+- Changed Billboard to higligjt
+⚡ Anti-Lag
+- Fixed anti-lag restore bug
+Materials, Size, and Transparency now restore correctly
+Cached original Size, Transparency, and Material
+- Prevented lighting/shader stacking
+🌗 Lighting / Visuals
+- Fixed Night/Day button logic
+Button text now reflects the next mode
+- Transparency no longer forced to 0
+Previous Updates
+12/6/25
+- Fixed Anti-Lag
+- Fixed multiple bugs
+- Added ESP
+- Removed duplicate button click logic
+- Aim system setting changed (p = 1)
+- Added Day/Night button inside Settings
+11/30/25 – TanqR GUI 2.4
+- Major GUI improvements
+- Fixed shader issues
+- Added Anti-Lag (unstable at the time — could cause white screen)
+- Shaders moved to Settings tab
+- Minor bug fixes
+11/29/25
+- Bug fixes
+- Shaders moved into Settings tab
+- Improved Aim system
+- Minor improvements
